@@ -1,22 +1,27 @@
 import { useCallback, useState } from 'react';
-import { axios } from '../../../api/axios';
+import { facerec } from '../../../api/facerec';
 import { User } from '../types';
 import { useUserContext } from '../hooks/useUserContext';
+import { getApiError } from '../../../utils/getApiError';
 
 async function autoLoginFn() {
-  axios.defaults.headers.common[
-    'Authorization'
-  ] = `Bearer ${localStorage.getItem('token')}`;
+  try {
+    facerec.defaults.headers.common[
+      'Authorization'
+    ] = `Bearer ${localStorage.getItem('token')}`;
 
-  const res = await axios.get<User>('/auth/me');
+    const res = await facerec.get<User>('/auth/me');
 
-  return res.data;
+    return res.data;
+  } catch (e) {
+    throw getApiError(e);
+  }
 }
 
 export function useAutoLogin() {
   const { setUser } = useUserContext();
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   const autoLogin = useCallback(async () => {
@@ -28,11 +33,10 @@ export function useAutoLogin() {
       setUser(user);
       setError(null);
     } catch (e) {
-      console.error(e);
       setError(e as Error);
 
       localStorage.removeItem('token');
-      delete axios.defaults.headers.common['Authorization'];
+      delete facerec.defaults.headers.common['Authorization'];
     }
 
     setIsLoading(false);

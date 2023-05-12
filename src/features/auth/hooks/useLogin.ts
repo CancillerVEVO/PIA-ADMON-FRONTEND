@@ -1,7 +1,9 @@
 import { useState } from 'react';
-import { axios } from '../../../api/axios';
+import { facerec } from '../../../api/facerec';
 import { User } from '../types';
 import { useUserContext } from '../hooks/useUserContext';
+import { getApiError } from '../../../utils/getApiError';
+import { logApiError } from '../../../utils/logApiError';
 
 export interface SignInProps {
   email: string;
@@ -14,9 +16,13 @@ export interface SignInResponse {
 }
 
 async function loginFn(params: SignInProps) {
-  const res = await axios.post<SignInResponse>('/auth/login', params);
+  try {
+    const res = await facerec.post<SignInResponse>('/auth/login', params);
 
-  return res.data;
+    return res.data;
+  } catch (e) {
+    throw getApiError(e);
+  }
 }
 
 export function useLogin() {
@@ -35,13 +41,13 @@ export function useLogin() {
       setError(null);
 
       localStorage.setItem('token', data.token);
-      axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
+      facerec.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
     } catch (e) {
-      console.error(e);
+      logApiError(e);
       setError(e as Error);
 
       localStorage.removeItem('token');
-      delete axios.defaults.headers.common['Authorization'];
+      delete facerec.defaults.headers.common['Authorization'];
     }
 
     setIsLoading(false);

@@ -21,14 +21,14 @@ export const UserContext = createContext<UserProviderValue>({
 });
 
 export function UserProvider(props: { children: React.ReactNode }) {
-  const [user, changeUser] = useState<User>(INITIAl_USER);
+  const [user, _setUser] = useState<User>(INITIAl_USER);
   const authenticated = user.id !== 0;
 
   const setUser = useCallback((user: User | null) => {
     if (user) {
-      changeUser(user);
+      _setUser(user);
     } else {
-      changeUser(INITIAl_USER);
+      _setUser(INITIAl_USER);
     }
   }, []);
 
