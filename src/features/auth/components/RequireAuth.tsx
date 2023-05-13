@@ -1,7 +1,7 @@
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useUserContext } from '../hooks/useUserContext';
 
-export function RequireAuth({ children }: { children?: React.ReactNode }) {
+export function RequireAuth() {
   const { authenticated } = useUserContext();
   const location = useLocation();
 
@@ -13,5 +13,5 @@ export function RequireAuth({ children }: { children?: React.ReactNode }) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  return <>{children}</>;
+  return <Outlet />;
 }
