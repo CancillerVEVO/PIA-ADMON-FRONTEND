@@ -8,8 +8,6 @@ export function Image({
   } | null;
   style?: React.CSSProperties;
 }) {
-  console.log(img);
-
   return (
     <div
       style={{

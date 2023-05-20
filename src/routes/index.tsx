@@ -8,8 +8,9 @@ import {
 import { HomePage, ProfilePage, Layout } from '../features/home';
 import {
   FaceDataChangePage,
-  FaceDataPage,
+  FaceDataDeletePage,
   FaceDataTestPage,
+  FaceDataPage,
 } from '@/features/face-data';
 
 export function AppRoutes() {
@@ -24,6 +25,7 @@ export function AppRoutes() {
 
           <Route path="/face-data/test" element={<FaceDataTestPage />} />
           <Route path="/face-data/change" element={<FaceDataChangePage />} />
+          <Route path="/face-data/delete" element={<FaceDataDeletePage />} />
           <Route path="/face-data" element={<FaceDataPage />} />
         </Route>
 

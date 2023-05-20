@@ -5,65 +5,39 @@ import Webcam from 'react-webcam';
 import { Image } from './Image';
 import { ErrorMessages } from '@/features/auth/components/ErrorMessages';
 
-export function Stepper({
+export function StepperDelete({
   title,
-  lastStepText,
   onFinish,
   isLoading,
   success,
   error,
   successMessage,
+  src: srcProp,
 }: {
   title: string;
-  lastStepText: string;
-  onFinish: (imageBase64: string) => void;
+  onFinish: () => void;
   isLoading?: boolean;
   success?: boolean;
   error?: Error | null;
   successMessage?: string;
+  src: string | null;
 }) {
   const navigate = useNavigate();
 
   const ref = useRef<Webcam>(null);
-  const [src, setSrc] = useState<string | null>(null);
+  const [src, setSrc] = useState<string | null>(srcProp);
 
   const [step, setStep] = useState(0);
-  const cancelTexts = ['Cancel', 'Retake photo'];
-  const confirmTexts = ['Take photo', lastStepText];
+  const cancelTexts = ['Cancel'];
+  const confirmTexts = ['Delete'];
   const totalSteps = confirmTexts.length;
 
-  const takePhoto = () => {
-    if (ref.current) {
-      const newSrc = ref.current.getScreenshot();
-      setSrc(newSrc);
-    }
-  };
-
   const onConfirm = () => {
-    switch (step) {
-      case 0:
-        takePhoto();
-        break;
-      case 1:
-        if (src) onFinish(src);
-        break;
-    }
-
-    setStep((s) => (s + 1 < totalSteps ? s + 1 : s));
+    onFinish();
   };
 
   const onCancel = () => {
-    switch (step) {
-      case 0:
-        navigate(-1);
-        break;
-      case 1:
-        setSrc(null);
-        takePhoto();
-        break;
-    }
-
-    setStep((s) => (s - 1 >= 0 ? s - 1 : s));
+    navigate(-1);
   };
 
   let content = (
@@ -81,19 +55,10 @@ export function Stepper({
           <Image
             img={{
               src,
-              alt: 'Taken user photo',
+              alt: 'User photo',
             }}
           />
-        ) : (
-          <Webcam
-            style={{
-              width: '100%',
-              height: '100%',
-            }}
-            ref={ref}
-            screenshotFormat="image/jpeg"
-          />
-        )}
+        ) : null}
       </div>
 
       <Footer

@@ -1,24 +1,22 @@
-import { useState } from 'react';
 import { Stepper } from '../components/Stepper';
+import { useTestFaceRec } from '../hooks/useTestFaceRec';
 
 export function FaceDataTestPage() {
-  const [data, setData] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
+  const { error, isLoading, testFaceRec, data } = useTestFaceRec();
+
+  const onFinish = (imageBase64: string) => {
+    return testFaceRec({
+      imageBase64,
+    });
+  };
 
   return (
     <Stepper
       title="Test face recognition"
       lastStepText="Test"
-      onFinish={() => {
-        setIsLoading(true);
-        setTimeout(() => {
-          setData({ name: 'Test' });
-          setIsLoading(false);
-        }, 3000);
-      }}
+      onFinish={onFinish}
       successMessage="Face recognized!"
-      success={data}
+      success={Boolean(data)}
       error={error}
       isLoading={isLoading}
     />

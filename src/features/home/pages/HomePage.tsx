@@ -1,3 +1,6 @@
+import { useNavigate } from 'react-router-dom';
+
 export function HomePage() {
-  return null;
+  const navigate = useNavigate();
+  return <div></div>;
 }
