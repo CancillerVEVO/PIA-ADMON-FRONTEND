@@ -6,3 +6,5 @@ export * from './pages/EventsPage';
 export * from './pages/MembersPage';
 
 export * from './components/Layout';
+
+export * from './providers/GroupProvider';

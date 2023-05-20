@@ -1,25 +1,22 @@
-import { Outlet, useParams } from 'react-router-dom';
-import { useGroup } from '../../hooks/useGroup';
+import { Outlet } from 'react-router-dom';
 import { Header } from './Header';
 import { TabBar } from './TabBar';
+import { GroupProvider } from '../../providers/GroupProvider';
 
 export function GroupPage() {
-  const params = useParams();
-  const id = params.groupId;
-
-  const { group } = useGroup(id ? parseInt(id) : undefined);
-
   return (
-    <div>
-      <Header group={group} />
+    <GroupProvider>
+      <div>
+        <Header />
 
-      <main>
-        <TabBar />
+        <main>
+          <TabBar />
 
-        <div>
-          <Outlet />
-        </div>
-      </main>
-    </div>
+          <div>
+            <Outlet />
+          </div>
+        </main>
+      </div>
+    </GroupProvider>
   );
 }

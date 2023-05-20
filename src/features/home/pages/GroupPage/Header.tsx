@@ -1,7 +1,9 @@
 import { format } from 'date-fns';
-import { Group } from '../../hooks/useGroup';
+import { useGroupContext } from '../../hooks/useGroupContext';
 
-export function Header({ group }: { group: Group | null }) {
+export function Header() {
+  const { group } = useGroupContext();
+
   return (
     <header
       style={{
