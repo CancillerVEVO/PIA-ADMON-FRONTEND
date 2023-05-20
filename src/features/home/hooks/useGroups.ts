@@ -2,7 +2,14 @@ import { useCallback, useEffect, useState } from 'react';
 import { facerec } from '@/api/facerec';
 import { getApiError } from '@/utils/getApiError';
 import { logApiError } from '@/utils/logApiError';
-import { Group } from '../types/Group';
+
+export interface Group {
+  id: number;
+  title: string;
+  description: string;
+  createdAt: string;
+  role: 'ADMIN' | 'MEMBER';
+}
 
 interface GroupsResponse {
   groups: {
@@ -11,7 +18,7 @@ interface GroupsResponse {
   };
 }
 
-async function getUserGroupsFn(params: GetUserGroupsParams) {
+async function getGroupsFn(params: GetGroupsParams) {
   try {
     if (!params.type) {
       return [];
@@ -27,20 +34,20 @@ async function getUserGroupsFn(params: GetUserGroupsParams) {
   }
 }
 
-export interface GetUserGroupsParams {
+export interface GetGroupsParams {
   type?: 'ADMIN' | 'MEMBER';
 }
 
-export function useUserGroups(params: GetUserGroupsParams) {
+export function useGroups(params: GetGroupsParams) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const [groups, setGroups] = useState<Group[]>([]);
 
-  const getUserGroups = useCallback(async () => {
+  const getGroups = useCallback(async () => {
     setIsLoading(true);
 
     try {
-      const groups = await getUserGroupsFn(params);
+      const groups = await getGroupsFn(params);
       setGroups(groups);
 
       setError(null);
@@ -56,11 +63,11 @@ export function useUserGroups(params: GetUserGroupsParams) {
   }, [JSON.stringify(params)]);
 
   useEffect(() => {
-    getUserGroups();
-  }, [getUserGroups]);
+    getGroups();
+  }, [getGroups]);
 
   return {
-    getUserGroups,
+    getGroups,
     isLoading,
     error,
     groups,

@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import {
   AutoLogin,
   LoginPage,
@@ -11,6 +11,8 @@ import {
   Layout,
   GroupsPage,
   GroupPage,
+  MembersPage,
+  EventsPage,
 } from '../features/home';
 import {
   FaceDataChangePage,
@@ -30,11 +32,19 @@ export function AppRoutes() {
             <Route path="profile" element={<ProfilePage />} />
 
             <Route path="/admin" element={<GroupsPage />}>
-              <Route path=":groupId" element={<GroupPage />} />
+              <Route path=":groupId" element={<GroupPage />}>
+                <Route path="" element={<Navigate to="members" />} />
+                <Route path="members" element={<MembersPage />} />
+                <Route path="events" element={<EventsPage />} />
+              </Route>
             </Route>
 
             <Route path="/member" element={<GroupsPage />}>
-              <Route path=":groupId" element={<GroupPage />} />
+              <Route path=":groupId" element={<GroupPage />}>
+                <Route path="" element={<Navigate to="members" />} />
+                <Route path="members" element={<MembersPage />} />
+                <Route path="events" element={<EventsPage />} />
+              </Route>
             </Route>
           </Route>
 

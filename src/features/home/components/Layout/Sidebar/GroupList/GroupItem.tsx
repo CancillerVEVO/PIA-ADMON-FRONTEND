@@ -1,7 +1,7 @@
-import { Group } from '@/features/home/types/Group';
 import styles from './GroupItem.module.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import { format } from 'date-fns';
+import { Group } from '@/features/home/hooks/useGroups';
 
 export function GroupItem({ group }: { group: Group }) {
   const navigate = useNavigate();

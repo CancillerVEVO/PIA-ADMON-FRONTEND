@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { facerec } from '@/api/facerec';
 import { getApiError } from '@/utils/getApiError';
 import { logApiError } from '@/utils/logApiError';
 
-interface Event {
+export interface Event {
   id: number;
   title: string;
   description: string;
@@ -11,7 +11,7 @@ interface Event {
   endDate: string;
 }
 
-interface Member {
+export interface Member {
   id: number;
   username: string;
   email: string;
@@ -19,20 +19,22 @@ interface Member {
   role: 'ADMIN' | 'MEMBER';
 }
 
-interface GroupResponse {
-  group: {
-    id: number;
-    title: string;
-    description: string;
-    createdAt: string;
-    events: Event[];
-    members: Member[];
-  };
+export interface Group {
+  id: number;
+  title: string;
+  description: string;
+  createdAt: string;
+  events: Event[];
+  members: Member[];
 }
 
-async function getGroupDetailFn(groupId: number) {
+interface GroupResponse {
+  group: Group;
+}
+
+async function getGroupFn(id: number) {
   try {
-    const res = await facerec.get<GroupResponse>(`/group/${groupId}`);
+    const res = await facerec.get<GroupResponse>(`/group/${id}`);
 
     return res.data.group;
   } catch (error) {
@@ -40,16 +42,16 @@ async function getGroupDetailFn(groupId: number) {
   }
 }
 
-export function useGroupDetail(groupId: number) {
+export function useGroup(id?: number) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-  const [group, setGroup] = useState<GroupResponse['group'] | null>(null);
+  const [group, setGroup] = useState<Group | null>(null);
 
-  const getGroupDetail = async () => {
+  const getGroup = useCallback(async (id: number) => {
     setIsLoading(true);
 
     try {
-      const group = await getGroupDetailFn(groupId);
+      const group = await getGroupFn(id);
       setGroup(group);
 
       setError(null);
@@ -61,10 +63,16 @@ export function useGroupDetail(groupId: number) {
     }
 
     setIsLoading(false);
-  };
+  }, []);
+
+  useEffect(() => {
+    if (id) {
+      getGroup(id);
+    }
+  }, [getGroup, id]);
 
   return {
-    getGroupDetail,
+    getGroup,
     isLoading,
     error,
     group,

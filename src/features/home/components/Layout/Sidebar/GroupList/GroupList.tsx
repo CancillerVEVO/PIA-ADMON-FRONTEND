@@ -1,10 +1,9 @@
-import { useUserGroups } from '@/features/home/hooks/useUserGroups';
+import { Group, useGroups } from '@/features/home/hooks/useGroups';
 import { GroupItem } from './GroupItem';
-import { Group } from '@/features/home/types/Group';
 import { Spinner } from 'react-bootstrap';
 
 export function GroupList({ type }: { type?: 'ADMIN' | 'MEMBER' }) {
-  const { groups, isLoading } = useUserGroups({
+  const { groups, isLoading } = useGroups({
     type,
   });
 
