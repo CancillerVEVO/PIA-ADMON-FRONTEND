@@ -13,6 +13,10 @@ interface GroupsResponse {
 
 async function getUserGroupsFn(params: GetUserGroupsParams) {
   try {
+    if (!params.type) {
+      return [];
+    }
+
     const res = await facerec.get<GroupsResponse>('/group');
 
     return params.type === 'ADMIN'
@@ -24,7 +28,7 @@ async function getUserGroupsFn(params: GetUserGroupsParams) {
 }
 
 export interface GetUserGroupsParams {
-  type: 'ADMIN' | 'MEMBER';
+  type?: 'ADMIN' | 'MEMBER';
 }
 
 export function useUserGroups(params: GetUserGroupsParams) {

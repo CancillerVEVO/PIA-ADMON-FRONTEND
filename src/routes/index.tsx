@@ -25,12 +25,15 @@ export function AppRoutes() {
       <Route element={<AutoLogin />}>
         <Route element={<RequireAuth />}>
           <Route path="/" element={<Layout />}>
-            <Route element={<HomePage />} />
+            <Route path="" element={<HomePage />} />
+
             <Route path="profile" element={<ProfilePage />} />
-            <Route path="groups/admin" element={<GroupsPage />}>
+
+            <Route path="/admin" element={<GroupsPage />}>
               <Route path=":groupId" element={<GroupPage />} />
             </Route>
-            <Route path="groups/member" element={<GroupsPage />}>
+
+            <Route path="/member" element={<GroupsPage />}>
               <Route path=":groupId" element={<GroupPage />} />
             </Route>
           </Route>

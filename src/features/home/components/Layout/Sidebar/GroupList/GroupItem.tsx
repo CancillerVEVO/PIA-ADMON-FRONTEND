@@ -1,6 +1,7 @@
 import { Group } from '@/features/home/types/Group';
 import styles from './GroupItem.module.css';
 import { useNavigate, useParams } from 'react-router-dom';
+import { format } from 'date-fns';
 
 export function GroupItem({ group }: { group: Group }) {
   const navigate = useNavigate();
@@ -16,14 +17,15 @@ export function GroupItem({ group }: { group: Group }) {
         border: 'none',
         borderBottom: '1px solid #ccc',
         width: '100%',
-        backgroundColor: groupId === id ? '#ccc' : 'transparent',
+        backgroundColor: groupId === id ? '#ddd' : 'transparent',
       }}
       className={styles.root}
-      onClick={() => navigate(`/groups/${role.toLowerCase()}/${id}`)}
+      onClick={() => navigate(`${role.toLowerCase()}/${id}`)}
     >
       <h4>{title}</h4>
       <p>{description}</p>
-      <p>{createdAt}</p>
+      {/* <p>{format(new Date(createdAt), "P 'at' p")}</p> */}
+      <p>{format(new Date(createdAt), 'PP')}</p>
     </button>
   );
 }

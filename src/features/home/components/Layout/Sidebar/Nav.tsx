@@ -1,7 +1,8 @@
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export function Nav() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   return (
     <nav
@@ -13,9 +14,9 @@ export function Nav() {
       <ul
         style={{
           listStyle: 'none',
-          padding: '1rem',
           display: 'flex',
           flexDirection: 'column',
+          padding: 0,
         }}
       >
         <li
@@ -24,8 +25,12 @@ export function Nav() {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+            padding: '1rem',
+            backgroundColor: location.pathname.includes('admin')
+              ? '#ddd'
+              : 'transparent',
           }}
-          onClick={() => navigate('/groups/admin')}
+          onClick={() => navigate('admin')}
         >
           <img
             style={{
@@ -43,9 +48,12 @@ export function Nav() {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            paddingTop: '1rem',
+            padding: '1rem',
+            backgroundColor: location.pathname.includes('member')
+              ? '#ddd'
+              : 'transparent',
           }}
-          onClick={() => navigate('/groups/member')}
+          onClick={() => navigate('member')}
         >
           <img
             width={50}

@@ -1,14 +1,11 @@
 import { useUserGroups } from '@/features/home/hooks/useUserGroups';
-import { useLocation } from 'react-router-dom';
 import { GroupItem } from './GroupItem';
 import { Group } from '@/features/home/types/Group';
 import { Spinner } from 'react-bootstrap';
 
-export function GroupList() {
-  const location = useLocation();
-
+export function GroupList({ type }: { type?: 'ADMIN' | 'MEMBER' }) {
   const { groups, isLoading } = useUserGroups({
-    type: location.pathname.includes('admin') ? 'ADMIN' : 'MEMBER',
+    type,
   });
 
   return (
