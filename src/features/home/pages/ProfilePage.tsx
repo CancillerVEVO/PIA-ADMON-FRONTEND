@@ -8,7 +8,7 @@ export function ProfilePage() {
       <h1>{user.username}</h1>
       <h1>{user.email}</h1>
       <h1>{user.id}</h1>
-      {user.imageUrl && <img src={user.imageUrl} alt={user.username} />}
+      {user.imageUrl ? <img src={user.imageUrl} alt={user.username} /> : null}
     </div>
   );
 }
