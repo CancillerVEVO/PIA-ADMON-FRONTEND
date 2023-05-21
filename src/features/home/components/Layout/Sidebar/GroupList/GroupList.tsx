@@ -1,11 +1,22 @@
 import { Group, useGroups } from '@/features/home/hooks/useGroups';
 import { GroupItem } from './GroupItem';
-import { Spinner } from 'react-bootstrap';
+import { Button, Spinner } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { eventEmitter } from '@/utils/eventEmitter';
 
 export function GroupList({ type }: { type?: 'ADMIN' | 'MEMBER' }) {
-  const { groups, isLoading } = useGroups({
+  const { groups, isLoading, refetch } = useGroups({
     type,
   });
+
+  useEffect(() => {
+    eventEmitter.on('GROUP_CREATED', refetch);
+
+    return () => {
+      eventEmitter.off('GROUP_CREATED', refetch);
+    };
+  }, [refetch]);
 
   return (
     <div
@@ -22,6 +33,8 @@ export function GroupList({ type }: { type?: 'ADMIN' | 'MEMBER' }) {
 }
 
 function Content({ groups }: { groups: Group[] }) {
+  const navigate = useNavigate();
+
   return (
     <div
       style={{
@@ -32,6 +45,16 @@ function Content({ groups }: { groups: Group[] }) {
         bottom: 0,
       }}
     >
+      <div
+        style={{
+          borderBottom: '2px solid #ccc',
+          display: 'flex',
+          justifyContent: 'flex-end',
+          padding: '1rem',
+        }}
+      >
+        <Button onClick={() => navigate('/admin/create')}>Create</Button>
+      </div>
       <ul
         style={{
           listStyle: 'none',

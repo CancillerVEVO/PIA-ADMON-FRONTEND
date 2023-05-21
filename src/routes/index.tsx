@@ -27,6 +27,9 @@ import {
   EventsPage,
   RegisterAttendancePage,
 } from '@/features/events';
+import { GroupCreatePage } from '@/features/home/pages/GroupCreatePage';
+import { EmptyPage } from '@/features/home/pages/EmptyPage';
+import { GroupEditPage } from '@/features/home/pages/GroupEditPage';
 
 export function AppRoutes() {
   return (
@@ -39,6 +42,10 @@ export function AppRoutes() {
             <Route path="profile" element={<ProfilePage />} />
 
             <Route path="/admin" element={<GroupsPage />}>
+              <Route path="" element={<EmptyPage />} />
+              <Route path="create" element={<GroupCreatePage />} />
+              <Route path=":groupId/edit" element={<GroupEditPage />} />
+
               <Route path=":groupId" element={<GroupPage />}>
                 <Route path="" element={<Navigate to="members" />} />
 

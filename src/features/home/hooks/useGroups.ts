@@ -66,10 +66,15 @@ export function useGroups(params: GetGroupsParams) {
     getGroups();
   }, [getGroups]);
 
+  const refetch = useCallback(() => {
+    getGroups();
+  }, [getGroups]);
+
   return {
     getGroups,
     isLoading,
     error,
     groups,
+    refetch,
   };
 }
