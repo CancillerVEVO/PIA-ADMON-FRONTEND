@@ -4,6 +4,8 @@ export function Nav() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  console.log(location.pathname);
+
   return (
     <nav
       style={{
@@ -49,7 +51,7 @@ export function Nav() {
             flexDirection: 'column',
             alignItems: 'center',
             padding: '1rem',
-            backgroundColor: location.pathname.includes('member')
+            backgroundColor: location.pathname.match(/^\/member/)
               ? '#ddd'
               : 'transparent',
           }}

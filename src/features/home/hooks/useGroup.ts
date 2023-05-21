@@ -17,6 +17,7 @@ export interface Member {
   email: string;
   imageUrl: string | null;
   role: 'ADMIN' | 'MEMBER';
+  joinedAt: string;
 }
 
 export interface Group {
