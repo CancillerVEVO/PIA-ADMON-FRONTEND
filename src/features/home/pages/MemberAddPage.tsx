@@ -1,19 +1,19 @@
-import { format } from 'date-fns';
 import { useGroupContext } from '../hooks/useGroupContext';
-import { Member } from '../hooks/useGroup';
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import { List } from '../components/List';
-import { useNavigate } from 'react-router-dom';
+import { Member, useMembersSearch } from '../hooks/useMembersSearch';
+import { useSearchParams } from 'react-router-dom';
+import { is } from 'date-fns/locale';
 
-export function MembersPage() {
-  const navigate = useNavigate();
-
+export function MemberAddPage() {
   const { group } = useGroupContext();
-
-  const members = group?.members ?? [];
-
+  const [params, setParams] = useSearchParams();
   const [selected, setSelected] = React.useState<Member[]>([]);
+
+  const { members, isLoading } = useMembersSearch({
+    name: params.get('search') ?? '',
+  });
 
   return (
     <div>
@@ -25,20 +25,39 @@ export function MembersPage() {
           alignItems: 'center',
         }}
       >
-        <h1>Members</h1>
-        {group?.currentUserRole === 'ADMIN' ? (
-          <div>
-            <Button variant="primary" onClick={() => navigate('add')}>
-              Add
-            </Button>{' '}
-            <Button variant="danger" disabled={selected.length === 0}>
-              Delete
-            </Button>
-          </div>
-        ) : null}
+        <h1>Add members</h1>
+        <div>
+          <Button variant="primary" disabled={selected.length === 0}>
+            Add
+          </Button>
+        </div>
+      </div>
+
+      <div
+        style={{
+          display: 'flex',
+          gap: '1rem',
+          padding: '1rem',
+        }}
+      >
+        <input
+          style={{
+            flex: 1,
+            padding: '0.5rem',
+          }}
+          type="search"
+          placeholder="Search by username"
+          defaultValue={params.get('search') ?? ''}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              setParams({ search: e.currentTarget.value });
+            }
+          }}
+        />
       </div>
 
       <List
+        isLoading={isLoading}
         data={members}
         getKey={(member) => member.id.toString()}
         onSelectedChange={setSelected}
@@ -81,23 +100,6 @@ function Item({ member }: { member: Member }) {
           flexDirection: 'column',
         }}
       >
-        {member.role === 'ADMIN' ? (
-          <span
-            style={{
-              backgroundColor: '#0f0',
-              padding: '0.25rem 0.5rem',
-              borderRadius: '0.5rem',
-              marginBottom: '0.5rem',
-              alignSelf: 'flex-start',
-              fontSize: '0.75rem',
-              fontWeight: 'bold',
-              textTransform: 'lowercase',
-            }}
-          >
-            {member.role}
-          </span>
-        ) : null}
-
         <p
           style={{
             padding: 0,
@@ -127,21 +129,6 @@ function Item({ member }: { member: Member }) {
             Email:
           </span>{' '}
           <span>{member.email}</span>
-        </p>
-        <p
-          style={{
-            padding: 0,
-            margin: 0,
-          }}
-        >
-          <span
-            style={{
-              fontWeight: 'bold',
-            }}
-          >
-            Joined at:
-          </span>{' '}
-          <span>{format(new Date(member.joinedAt), "PPP 'at' p")}</span>
         </p>
       </div>
     </>

@@ -1,3 +1,5 @@
+import { Spinner } from 'react-bootstrap';
+
 export interface ListProps<T> {
   data: T[];
   selected: T[];
@@ -5,6 +7,7 @@ export interface ListProps<T> {
   renderItem: (item: T) => React.ReactNode;
   getKey: (item: T) => string;
   readOnly?: boolean;
+  isLoading?: boolean;
 }
 
 export function List<T>({
@@ -14,7 +17,35 @@ export function List<T>({
   renderItem,
   getKey,
   readOnly,
+  isLoading,
 }: ListProps<T>) {
+  if (isLoading) {
+    return (
+      <div
+        style={{
+          textAlign: 'center',
+          padding: '1rem',
+        }}
+      >
+        <Spinner />
+      </div>
+    );
+  }
+
+  if (data.length === 0) {
+    return (
+      <p
+        style={{
+          padding: '1rem',
+          textAlign: 'center',
+          color: '#666',
+        }}
+      >
+        No data
+      </p>
+    );
+  }
+
   return (
     <ul
       style={{

@@ -12,6 +12,7 @@ import {
   GroupsPage,
   GroupPage,
   MembersPage,
+  MemberAddPage,
   EventsPage,
 } from '../features/home';
 import {
@@ -34,7 +35,10 @@ export function AppRoutes() {
             <Route path="/admin" element={<GroupsPage />}>
               <Route path=":groupId" element={<GroupPage />}>
                 <Route path="" element={<Navigate to="members" />} />
+
                 <Route path="members" element={<MembersPage />} />
+                <Route path="members/add" element={<MemberAddPage />} />
+
                 <Route path="events" element={<EventsPage />} />
               </Route>
             </Route>
@@ -42,7 +46,10 @@ export function AppRoutes() {
             <Route path="/member" element={<GroupsPage />}>
               <Route path=":groupId" element={<GroupPage />}>
                 <Route path="" element={<Navigate to="members" />} />
+
                 <Route path="members" element={<MembersPage />} />
+                <Route path="members/add" element={<MemberAddPage />} />
+
                 <Route path="events" element={<EventsPage />} />
               </Route>
             </Route>
