@@ -4,8 +4,6 @@ export function Nav() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  console.log(location.pathname);
-
   return (
     <nav
       style={{

@@ -27,6 +27,7 @@ export interface Group {
   createdAt: string;
   events: Event[];
   members: Member[];
+  currentUserRole: 'ADMIN' | 'MEMBER';
 }
 
 interface GroupResponse {
