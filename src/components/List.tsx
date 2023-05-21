@@ -8,6 +8,7 @@ export interface ListProps<T> {
   getKey: (item: T) => string;
   readOnly?: boolean;
   isLoading?: boolean;
+  isSelectable?: (item: T) => boolean;
 }
 
 export function List<T>({
@@ -18,6 +19,7 @@ export function List<T>({
   getKey,
   readOnly,
   isLoading,
+  isSelectable = () => true,
 }: ListProps<T>) {
   if (isLoading) {
     return (
@@ -65,7 +67,7 @@ export function List<T>({
             backgroundColor: selected.includes(item) ? '#ddd' : 'transparent',
           }}
         >
-          {!readOnly && (
+          {!readOnly && isSelectable(item) && (
             <input
               type="checkbox"
               checked={selected.includes(item)}

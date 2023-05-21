@@ -22,16 +22,16 @@ export function MemberAddPage() {
     name: params.get('search') ?? '',
   });
 
-  const onAdd = () => {
+  const onAdd = async () => {
     if (!group) return;
 
     const members = selected.map((member) => member.id);
     const groupId = group.id;
 
-    memberAdd.addMembers({ members, groupId });
-    alert('Members added');
-
+    await memberAdd.addMembers({ members, groupId });
     refetch();
+
+    alert('Members added');
   };
 
   const data = React.useMemo(() => {
@@ -52,17 +52,15 @@ export function MemberAddPage() {
           alignItems: 'center',
         }}
       >
-        <div
+        <h1
           style={{
             display: 'flex',
             gap: '0.5rem',
           }}
         >
-          <h1>
-            <Link to={pathname}>Members</Link> /
-          </h1>{' '}
-          <h1>Add members</h1>
-        </div>
+          <Link to={pathname}>Members</Link> / <span>Add members</span>
+        </h1>
+
         <div>
           <Button
             onClick={onAdd}

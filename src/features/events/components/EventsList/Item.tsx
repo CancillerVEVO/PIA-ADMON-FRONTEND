@@ -1,6 +1,7 @@
 import { Event } from '@/features/home';
 import { compareAsc, format } from 'date-fns';
 import { Link } from 'react-router-dom';
+import { Field } from '../Field';
 
 export function Item({ event }: { event: Event }) {
   const isClosed = compareAsc(new Date(), new Date(event.endDate)) === 1;
@@ -28,7 +29,6 @@ export function Item({ event }: { event: Event }) {
             color: 'white',
             padding: '0.25rem 0.5rem',
             borderRadius: '0.5rem',
-            alignSelf: 'flex-start',
             fontSize: '0.75rem',
             fontWeight: 'bold',
             textTransform: 'uppercase',
@@ -48,25 +48,5 @@ export function Item({ event }: { event: Event }) {
         value={format(new Date(event.endDate), "PPP 'at' p")}
       />
     </div>
-  );
-}
-
-function Field({ label, value }: { label: string; value: string }) {
-  return (
-    <p
-      style={{
-        padding: 0,
-        margin: 0,
-      }}
-    >
-      <span
-        style={{
-          fontWeight: 'bold',
-        }}
-      >
-        {label}:
-      </span>{' '}
-      <span>{value}</span>
-    </p>
   );
 }

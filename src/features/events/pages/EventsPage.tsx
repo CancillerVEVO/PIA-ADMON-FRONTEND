@@ -22,11 +22,11 @@ export function EventsPage() {
 
     await eventsDelete.deleteEvents({ events });
     refetch();
-
-    alert('Events deleted');
   };
 
-  const onCreate = () => {};
+  const onCreate = () => {
+    navigate('create');
+  };
 
   return (
     <div>

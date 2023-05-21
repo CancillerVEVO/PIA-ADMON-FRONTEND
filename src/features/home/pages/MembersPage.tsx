@@ -26,8 +26,6 @@ export function MembersPage() {
 
     await membersDelete.deleteMembers({ members, groupId });
     refetch();
-
-    alert('Members deleted');
   };
 
   return (
@@ -64,6 +62,7 @@ export function MembersPage() {
         renderItem={(member) => <Item member={member} />}
         selected={selected}
         readOnly={group?.currentUserRole !== 'ADMIN'}
+        isSelectable={(member) => member.role !== 'ADMIN'}
       />
     </div>
   );
@@ -122,7 +121,6 @@ function Item({ member }: { member: Member }) {
                 color: 'white',
                 padding: '0.25rem 0.5rem',
                 borderRadius: '0.5rem',
-                alignSelf: 'flex-start',
                 fontSize: '0.75rem',
                 fontWeight: 'bold',
                 textTransform: 'uppercase',
