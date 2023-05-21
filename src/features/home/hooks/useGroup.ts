@@ -73,8 +73,14 @@ export function useGroup(id?: number) {
     }
   }, [getGroup, id]);
 
+  const refetch = useCallback(() => {
+    if (id) {
+      getGroup(id);
+    }
+  }, [getGroup, id]);
+
   return {
-    getGroup,
+    refetch,
     isLoading,
     error,
     group,

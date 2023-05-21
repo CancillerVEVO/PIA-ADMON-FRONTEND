@@ -3,17 +3,44 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import { List } from '../components/List';
 import { Member, useMembersSearch } from '../hooks/useMembersSearch';
-import { useSearchParams } from 'react-router-dom';
-import { is } from 'date-fns/locale';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
+import { useMembersAdd } from '../hooks/useMembersAdd';
+
+const EMPTY_ARRAY: Member[] = [];
 
 export function MemberAddPage() {
-  const { group } = useGroupContext();
+  const { group, refetch } = useGroupContext();
   const [params, setParams] = useSearchParams();
   const [selected, setSelected] = React.useState<Member[]>([]);
+  const location = useLocation();
+  const pathname = location.pathname.split('/').slice(0, -1).join('/');
+  const memberAdd = useMembersAdd();
+
+  const currentMembers = group?.members ?? EMPTY_ARRAY;
 
   const { members, isLoading } = useMembersSearch({
     name: params.get('search') ?? '',
   });
+
+  const onAdd = () => {
+    if (!group) return;
+
+    const members = selected.map((member) => member.id);
+    const groupId = group.id;
+
+    memberAdd.addMembers({ members, groupId });
+    alert('Members added');
+
+    refetch();
+  };
+
+  const data = React.useMemo(() => {
+    return members.filter((member) => {
+      return !currentMembers.some(
+        (currentMember) => currentMember.email === member.email
+      );
+    });
+  }, [currentMembers, members]);
 
   return (
     <div>
@@ -25,9 +52,23 @@ export function MemberAddPage() {
           alignItems: 'center',
         }}
       >
-        <h1>Add members</h1>
+        <div
+          style={{
+            display: 'flex',
+            gap: '0.5rem',
+          }}
+        >
+          <h1>
+            <Link to={pathname}>Members</Link> /
+          </h1>{' '}
+          <h1>Add members</h1>
+        </div>
         <div>
-          <Button variant="primary" disabled={selected.length === 0}>
+          <Button
+            onClick={onAdd}
+            variant="primary"
+            disabled={selected.length === 0}
+          >
             Add
           </Button>
         </div>
@@ -58,7 +99,7 @@ export function MemberAddPage() {
 
       <List
         isLoading={isLoading}
-        data={members}
+        data={data}
         getKey={(member) => member.id.toString()}
         onSelectedChange={setSelected}
         renderItem={(member) => <Item member={member} />}
