@@ -74,7 +74,12 @@ export function EventPage() {
               Edit
             </Button>
           ) : null}{' '}
-          <Button type="submit" variant="success" form="create-event-form">
+          <Button
+            type="submit"
+            variant="success"
+            form="create-event-form"
+            onClick={() => navigate(`/register-attendance/${eventId}`)}
+          >
             Register attendance
           </Button>
         </div>

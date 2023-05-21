@@ -25,6 +25,7 @@ import {
   EventEditPage,
   EventPage,
   EventsPage,
+  RegisterAttendancePage,
 } from '@/features/events';
 
 export function AppRoutes() {
@@ -68,6 +69,11 @@ export function AppRoutes() {
           <Route path="/face-data/change" element={<FaceDataChangePage />} />
           <Route path="/face-data/delete" element={<FaceDataDeletePage />} />
           <Route path="/face-data" element={<FaceDataPage />} />
+
+          <Route
+            path="/register-attendance/:eventId"
+            element={<RegisterAttendancePage />}
+          />
         </Route>
 
         <Route path="/login" element={<LoginPage />} />
