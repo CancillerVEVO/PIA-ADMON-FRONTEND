@@ -26,6 +26,7 @@ export function RegisterAttendancePage() {
       success={Boolean(data)}
       error={error}
       isLoading={isLoading}
+      fileBrowserDisabled
     />
   );
 }

@@ -13,6 +13,7 @@ export function Stepper({
   success,
   error,
   successMessage,
+  fileBrowserDisabled,
 }: {
   title: string;
   lastStepText: string;
@@ -21,11 +22,32 @@ export function Stepper({
   success?: boolean;
   error?: Error | null;
   successMessage?: string;
+  fileBrowserDisabled?: boolean;
 }) {
   const navigate = useNavigate();
 
   const ref = useRef<Webcam>(null);
   const [src, setSrc] = useState<string | null>(null);
+
+  const onChageInputFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      setSrc(e.target?.result as string);
+    };
+
+    reader.readAsDataURL(file);
+
+    e.target.value = '';
+
+    setStep((s) => (s + 1 < totalSteps ? s + 1 : s));
+  };
 
   const [step, setStep] = useState(0);
   const cancelTexts = ['Cancel', 'Retake photo'];
@@ -197,6 +219,15 @@ export function Stepper({
             }}
           >
             <h1>{title}</h1>
+            <input
+              type="file"
+              accept="image/png, image/jpeg"
+              onChange={onChageInputFile}
+              disabled={fileBrowserDisabled}
+              style={{
+                display: fileBrowserDisabled ? 'none' : 'inline',
+              }}
+            />
           </Card.Title>
 
           {content}
