@@ -1,7 +1,7 @@
 import { useGroupContext } from '../hooks/useGroupContext';
 import React from 'react';
 import { Button } from 'react-bootstrap';
-import { List } from '../components/List';
+import { List } from '@/components/List';
 import { Member, useMembersSearch } from '../hooks/useMembersSearch';
 import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import { useMembersAdd } from '../hooks/useMembersAdd';

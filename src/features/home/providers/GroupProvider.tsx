@@ -6,14 +6,14 @@ export interface GroupProviderValue {
   group: Group | null;
   isLoading: boolean;
   error: Error | null;
-  refetch: () => void;
+  refetch: () => Promise<void>;
 }
 
 export const GroupContext = createContext<GroupProviderValue>({
   group: null,
   isLoading: false,
   error: null,
-  refetch: () => {},
+  refetch: async () => {},
 });
 
 export function GroupProvider(props: { children: React.ReactNode }) {

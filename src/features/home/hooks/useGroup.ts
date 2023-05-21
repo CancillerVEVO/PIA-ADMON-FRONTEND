@@ -73,9 +73,9 @@ export function useGroup(id?: number) {
     }
   }, [getGroup, id]);
 
-  const refetch = useCallback(() => {
+  const refetch = useCallback(async () => {
     if (id) {
-      getGroup(id);
+      await getGroup(id);
     }
   }, [getGroup, id]);
 

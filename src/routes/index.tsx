@@ -13,7 +13,6 @@ import {
   GroupPage,
   MembersPage,
   MemberAddPage,
-  EventsPage,
 } from '../features/home';
 import {
   FaceDataChangePage,
@@ -21,6 +20,7 @@ import {
   FaceDataTestPage,
   FaceDataPage,
 } from '@/features/face-data';
+import { EventsPage } from '@/features/events';
 
 export function AppRoutes() {
   return (

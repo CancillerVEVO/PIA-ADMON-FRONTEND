@@ -3,7 +3,7 @@ import { useGroupContext } from '../hooks/useGroupContext';
 import { Member } from '../hooks/useGroup';
 import React from 'react';
 import { Button } from 'react-bootstrap';
-import { List } from '../components/List';
+import { List } from '@/components/List';
 import { useNavigate } from 'react-router-dom';
 import { useMembersDelete } from '../hooks/useMembersDelete';
 
@@ -18,16 +18,16 @@ export function MembersPage() {
 
   const membersDelete = useMembersDelete();
 
-  const onDelete = () => {
+  const onDelete = async () => {
     if (!group) return;
 
     const members = selected.map((member) => member.id);
     const groupId = group.id;
 
-    membersDelete.deleteMembers({ members, groupId });
-    alert('Members deleted');
-
+    await membersDelete.deleteMembers({ members, groupId });
     refetch();
+
+    alert('Members deleted');
   };
 
   return (
@@ -100,38 +100,38 @@ function Item({ member }: { member: Member }) {
           flexDirection: 'column',
         }}
       >
-        {member.role === 'ADMIN' ? (
-          <span
-            style={{
-              backgroundColor: '#0f0',
-              padding: '0.25rem 0.5rem',
-              borderRadius: '0.5rem',
-              marginBottom: '0.5rem',
-              alignSelf: 'flex-start',
-              fontSize: '0.75rem',
-              fontWeight: 'bold',
-              textTransform: 'lowercase',
-            }}
-          >
-            {member.role}
-          </span>
-        ) : null}
-
-        <p
+        <div
           style={{
-            padding: 0,
-            margin: 0,
+            display: 'flex',
+            gap: '1rem',
+            alignItems: 'center',
+            marginBottom: '0.5rem',
           }}
         >
-          <span
+          <h4
             style={{
-              fontWeight: 'bold',
+              margin: 0,
             }}
           >
-            Username:
-          </span>{' '}
-          <span>{member.username}</span>
-        </p>
+            {member.username}
+          </h4>
+          {member.role === 'ADMIN' ? (
+            <span
+              style={{
+                backgroundColor: '#4caf50',
+                color: 'white',
+                padding: '0.25rem 0.5rem',
+                borderRadius: '0.5rem',
+                alignSelf: 'flex-start',
+                fontSize: '0.75rem',
+                fontWeight: 'bold',
+                textTransform: 'uppercase',
+              }}
+            >
+              {member.role}
+            </span>
+          ) : null}
+        </div>
         <p
           style={{
             padding: 0,
