@@ -5,15 +5,30 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import { List } from '../components/List';
 import { useNavigate } from 'react-router-dom';
+import { useMembersDelete } from '../hooks/useMembersDelete';
 
 export function MembersPage() {
   const navigate = useNavigate();
 
-  const { group } = useGroupContext();
+  const { group, refetch } = useGroupContext();
 
   const members = group?.members ?? [];
 
   const [selected, setSelected] = React.useState<Member[]>([]);
+
+  const membersDelete = useMembersDelete();
+
+  const onDelete = () => {
+    if (!group) return;
+
+    const members = selected.map((member) => member.id);
+    const groupId = group.id;
+
+    membersDelete.deleteMembers({ members, groupId });
+    alert('Members deleted');
+
+    refetch();
+  };
 
   return (
     <div>
@@ -31,7 +46,11 @@ export function MembersPage() {
             <Button variant="primary" onClick={() => navigate('add')}>
               Add
             </Button>{' '}
-            <Button variant="danger" disabled={selected.length === 0}>
+            <Button
+              variant="danger"
+              disabled={selected.length === 0}
+              onClick={onDelete}
+            >
               Delete
             </Button>
           </div>
