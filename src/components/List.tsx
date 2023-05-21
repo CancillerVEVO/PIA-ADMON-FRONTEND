@@ -2,8 +2,8 @@ import { Spinner } from 'react-bootstrap';
 
 export interface ListProps<T> {
   data: T[];
-  selected: T[];
-  onSelectedChange: (selected: T[]) => void;
+  selected?: T[];
+  onSelectedChange?: (selected: T[]) => void;
   renderItem: (item: T) => React.ReactNode;
   getKey: (item: T) => string;
   readOnly?: boolean;
@@ -13,8 +13,8 @@ export interface ListProps<T> {
 
 export function List<T>({
   data,
-  selected,
-  onSelectedChange,
+  selected = [],
+  onSelectedChange = () => {},
   renderItem,
   getKey,
   readOnly,

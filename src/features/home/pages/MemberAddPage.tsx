@@ -30,8 +30,6 @@ export function MemberAddPage() {
 
     await memberAdd.addMembers({ members, groupId });
     refetch();
-
-    alert('Members added');
   };
 
   const data = React.useMemo(() => {

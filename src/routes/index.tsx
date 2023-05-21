@@ -20,7 +20,12 @@ import {
   FaceDataTestPage,
   FaceDataPage,
 } from '@/features/face-data';
-import { EventCreatePage, EventPage, EventsPage } from '@/features/events';
+import {
+  EventCreatePage,
+  EventEditPage,
+  EventPage,
+  EventsPage,
+} from '@/features/events';
 
 export function AppRoutes() {
   return (
@@ -40,8 +45,12 @@ export function AppRoutes() {
                 <Route path="members/add" element={<MemberAddPage />} />
 
                 <Route path="events" element={<EventsPage />} />
-                <Route path="events/create" element={<EventCreatePage />} />
                 <Route path="events/:eventId" element={<EventPage />} />
+                <Route
+                  path="events/:eventId/edit"
+                  element={<EventEditPage />}
+                />
+                <Route path="events/create" element={<EventCreatePage />} />
               </Route>
             </Route>
 

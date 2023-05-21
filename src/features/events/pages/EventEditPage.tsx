@@ -1,10 +1,11 @@
 import { add, format } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { Button, Spinner } from 'react-bootstrap';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { CreateEventParams, useEventCreate } from '../hooks/useEventCreate';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useGroupContext } from '@/features/home';
 import { ErrorMessages } from '@/features/auth/components/ErrorMessages';
+import { useEvent } from '../hooks/useEvent';
+import { EditEventParams, useEventEdit } from '../hooks/useEventEdit';
 
 interface FormValues {
   title: string;
@@ -16,13 +17,17 @@ function formatDate(date: Date) {
   return format(date, "yyyy-MM-dd'T'HH:mm");
 }
 
-export function EventCreatePage() {
+export function EventEditPage() {
   const { group, refetch } = useGroupContext();
+  const params = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const pathname = location.pathname.split('/').slice(0, -1).join('/');
+  const pathnameEvents = location.pathname.split('/').slice(0, -2).join('/');
+  const pathnameEvent = location.pathname.split('/').slice(0, -1).join('/');
 
-  const eventCreate = useEventCreate();
+  const eventId = params.eventId ? parseInt(params.eventId) : undefined;
+  const eventEdit = useEventEdit();
+  const { event } = useEvent(eventId);
 
   const [values, setValues] = useState<FormValues>({
     title: '',
@@ -30,32 +35,42 @@ export function EventCreatePage() {
     endDate: formatDate(add(new Date(), { days: 1 })),
   });
 
+  useEffect(() => {
+    setValues({
+      title: event?.title || '',
+      description: event?.description || '',
+      endDate: event?.endDate
+        ? formatDate(new Date(event.endDate))
+        : formatDate(add(new Date(), { days: 1 })),
+    });
+  }, [event]);
+
   const onChange = (e: { name: string; value: string }) => {
     const { name, value } = e;
     setValues((prev) => ({ ...prev, [name]: value }));
   };
 
   useEffect(() => {
-    if (eventCreate.data) {
-      navigate(pathname);
+    if (eventEdit.data) {
+      navigate(pathnameEvent);
     }
-  }, [eventCreate.data, navigate, pathname]);
+  }, [eventEdit.data, navigate, pathnameEvent]);
 
   const onCreate = async () => {
     try {
-      if (!group) {
+      if (!group || !eventId) {
         return;
       }
 
       const endDate = new Date(values.endDate);
 
-      const event: CreateEventParams = {
+      const event: EditEventParams = {
         ...values,
         endDate: endDate.toISOString(),
         groupId: group?.id,
       };
 
-      await eventCreate.createEvent(event);
+      await eventEdit.editEvent(eventId, event);
       refetch();
     } catch (error) {
       console.error(error);
@@ -82,7 +97,9 @@ export function EventCreatePage() {
             gap: '0.5rem',
           }}
         >
-          <Link to={pathname}>Events</Link> / <span>Create event</span>
+          <Link to={pathnameEvents}>Events</Link> /{' '}
+          <Link to={pathnameEvent}>{event?.title}</Link> /{' '}
+          <span>Edit event</span>
         </h1>
 
         <div>
@@ -90,10 +107,10 @@ export function EventCreatePage() {
             type="submit"
             variant="primary"
             form="create-event-form"
-            disabled={eventCreate.isLoading}
+            disabled={eventEdit.isLoading}
           >
-            Create
-            {eventCreate.isLoading && (
+            Save
+            {eventEdit.isLoading && (
               <div
                 style={{
                   position: 'absolute',
@@ -101,7 +118,7 @@ export function EventCreatePage() {
                   left: 0,
                   right: 0,
                   bottom: 0,
-                  display: eventCreate.isLoading ? 'flex' : 'none',
+                  display: eventEdit.isLoading ? 'flex' : 'none',
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}
@@ -131,7 +148,7 @@ export function EventCreatePage() {
               padding: '0.5rem',
             }}
             required
-            disabled={eventCreate.isLoading}
+            disabled={eventEdit.isLoading}
           />
         </Field>
 
@@ -147,7 +164,7 @@ export function EventCreatePage() {
               padding: '0.5rem',
             }}
             required
-            disabled={eventCreate.isLoading}
+            disabled={eventEdit.isLoading}
           />
         </Field>
 
@@ -163,12 +180,12 @@ export function EventCreatePage() {
             }}
             min={formatDate(new Date())}
             required
-            disabled={eventCreate.isLoading}
+            disabled={eventEdit.isLoading}
           />
         </Field>
       </form>
 
-      <ErrorMessages error={eventCreate.error} />
+      <ErrorMessages error={eventEdit.error} />
     </div>
   );
 }
