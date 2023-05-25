@@ -13,7 +13,7 @@ export function LoginPage() {
   const from = location.state ? location.state.from.pathname : '/';
 
   const [values, setValues] = useState<SignInProps>({
-    email: 'karen.mora@gmail.com',
+    email: '',
     password: '123456',
   });
 
